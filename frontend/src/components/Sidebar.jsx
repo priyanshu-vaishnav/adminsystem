@@ -45,7 +45,7 @@ export default function Sidebar() {
       <h2
         style={{ marginBottom: "30px", fontSize: "20px", paddingLeft: "8px" }}
       >
-        Wickbund
+        ADMIN PANEL
       </h2>
       <NavLink to="/dashboard" style={linkStyle}>
         Dashboard

@@ -40,7 +40,7 @@ Your username: ${username}
 You can now log in to the Wickbund Dashboard with the email and password you submitted.
 
 Regards,
-Wickbund Team
+AdminSystem Team
   `;
 
   const html = `
@@ -72,7 +72,7 @@ We're writing to inform you that your onboarding request was not approved at thi
 If you believe this is a mistake, please contact the admin team.
 
 Regards,
-Wickbund Team
+AdminSystem Team
   `;
 
   const html = `
