@@ -7,7 +7,7 @@ export default function IndentForm() {
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
@@ -19,7 +19,7 @@ export default function IndentForm() {
       full_name: fullName,
       username,
       email,
-      role, // plain text only for demo; real system should never store this
+      password , // plain text only for demo; real system should never store this
       status: "pending",
     });
     if (error) setMessage("Error: " + error.message);
@@ -28,7 +28,7 @@ export default function IndentForm() {
       setFullName("");
       setUsername("");
       setEmail("");
-      setRole("");
+      setPassword("");
     }
   };
 
@@ -80,12 +80,12 @@ export default function IndentForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label>role</label>
+        <label>password</label>
         <input
-          type="role"
+          type="password "
           style={inputStyle}
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         <button
