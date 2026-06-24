@@ -123,7 +123,7 @@ export default function Approval() {
                   <td style={{ padding: "12px" }}>{ind.full_name}</td>
                   <td style={{ padding: "12px" }}>{ind.username}</td>
                   <td style={{ padding: "12px" }}>{ind.email}</td>
-                  <td style={{ padding: "12px" }}>{ind.password}</td>
+                  <td style={{ padding: "12px" }}>{ind.status}</td>
                   <td style={{ padding: "12px" }}>
                     <span style={badgeStyle(ind.status)}>{ind.status}</span>
                   </td>
