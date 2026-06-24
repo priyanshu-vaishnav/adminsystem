@@ -45,14 +45,13 @@ export default function Approval() {
             fullName: indent.full_name,
             username: indent.username,
           }),
-        }
+        },
       );
       const result = await response.json();
 
       if (!response.ok || !result.success) {
         alert(
-          "Could not create approved user: " +
-            (result.error || "Server error")
+          "Could not create approved user: " + (result.error || "Server error"),
         );
         return;
       }

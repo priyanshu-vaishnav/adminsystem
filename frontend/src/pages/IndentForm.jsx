@@ -19,7 +19,7 @@ export default function IndentForm() {
       full_name: fullName,
       username,
       email,
-      password , // plain text only for demo; real system should never store this
+      password, // plain text only for demo; real system should never store this
       status: "pending",
     });
     if (error) setMessage("Error: " + error.message);
