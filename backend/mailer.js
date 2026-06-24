@@ -1,42 +1,35 @@
-require("dotenv").config();
-const nodemailer = require("nodemailer");
+require('dotenv').config();
+const { Resend } = require('resend');
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("Error connecting to email server:", error);
-  } else {
-    console.log("Email server is ready to send messages");
-  }
-});
+// Use Resend's test sender if you haven't verified your own domain yet.
+const FROM_ADDRESS = process.env.EMAIL_FROM || 'Wickbund Dashboard <onboarding@resend.dev>';
 
 const sendEmail = async (to, subject, text, html) => {
   try {
-    console.log("Attempting to send email to:", to);
-    const info = await transporter.sendMail({
-      from: `"Wickbund Dashboard" <${process.env.EMAIL_USER}>`,
+    console.log('Attempting to send email to:', to);
+    const { data, error } = await resend.emails.send({
+      from: FROM_ADDRESS,
       to,
       subject,
       text,
       html,
     });
-    console.log("Message sent successfully:", info.messageId);
-    return { success: true, messageId: info.messageId };
+    if (error) {
+      console.error('Error sending email to', to, ':', error.message);
+      return { success: false, error: error.message };
+    }
+    console.log('Message sent successfully:', data.id);
+    return { success: true, messageId: data.id };
   } catch (error) {
-    console.error("Error sending email to", to, ":", error.message);
+    console.error('Error sending email to', to, ':', error.message);
     return { success: false, error: error.message };
   }
 };
 
 async function sendApprovalEmail(to, fullName, username) {
-  const subject = "Your Account Has Been Approved";
+  const subject = 'Your Account Has Been Approved';
 
   const text = `
 Hello ${fullName},
@@ -44,9 +37,10 @@ Hello ${fullName},
 Your onboarding request has been approved.
 Your username: ${username}
 
-You can now log in to the  Dashboard with the email and password you submitted.
+You can now log in to the Wickbund Dashboard with the email and password you submitted.
 
 Regards,
+Wickbund Team
   `;
 
   const html = `
@@ -56,9 +50,11 @@ Regards,
   <p>Hello <strong>${fullName}</strong>,</p>
   <p>Your onboarding request has been <strong>approved</strong>.</p>
   <p>Your username: <strong>${username}</strong></p>
-  <p>You can now log in to the  Dashboard with the email and password you submitted.</p>
+  <p>You can now log in to the Wickbund Dashboard with the email and password you submitted.</p>
   <hr style="margin: 20px 0;" />
-  
+  <p style="font-size: 12px; color: #888;">
+    © ${new Date().getFullYear()} Wickbund Dashboard. All rights reserved.
+  </p>
 </div>
   `;
 
@@ -66,7 +62,7 @@ Regards,
 }
 
 async function sendRejectionEmail(to, fullName) {
-  const subject = "Update on Your Account Request";
+  const subject = 'Update on Your Account Request';
 
   const text = `
 Hello ${fullName},
@@ -76,7 +72,7 @@ We're writing to inform you that your onboarding request was not approved at thi
 If you believe this is a mistake, please contact the admin team.
 
 Regards,
-
+Wickbund Team
   `;
 
   const html = `
@@ -89,7 +85,9 @@ Regards,
     If you believe this is a mistake, please contact the admin team.
   </p>
   <hr style="margin: 20px 0;" />
-  
+  <p style="font-size: 12px; color: #888;">
+    © ${new Date().getFullYear()} Wickbund Dashboard. All rights reserved.
+  </p>
 </div>
   `;
 
