@@ -34,19 +34,30 @@ export default function Approval() {
 
   const updateStatus = async (id, status, indent) => {
     if (status === "approved") {
-      // Create the real auth account only when approved
-      const { error: signUpError } = await supabase.auth.signUp({
-        email: indent.email,
-        password: indent.password,
-        options: {
-          data: { name: indent.full_name, username: indent.username },
-        },
-      });
-      if (signUpError) {
-        alert("Could not create user: " + signUpError.message);
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/create-user`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: indent.email,
+            password: indent.password,
+            fullName: indent.full_name,
+            username: indent.username,
+          }),
+        }
+      );
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        alert(
+          "Could not create approved user: " +
+            (result.error || "Server error")
+        );
         return;
       }
     }
+
     await supabase.from("indents").update({ status }).eq("id", id);
 
     // Fire-and-forget email notification (does not block UI if it fails)
